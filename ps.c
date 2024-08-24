@@ -216,8 +216,7 @@ void drawbeg(void)
 	out_fontup(o_f);
 	if (l_page != page_n || l_size != o_s || l_wid != ps_linewid ||
 			l_cap != ps_linecap || l_join != ps_linejoin) {
-		int lwid = ps_linewid * o_s;
-		outf("%d.%01d setlinewidth ", lwid / 10, lwid % 10);
+		outf("%d setlinewidth ", ps_linewid);
 		outf("%d setlinecap ", ps_linecap);
 		outf("%d setlinejoin\n", ps_linejoin);
 		o_flush();

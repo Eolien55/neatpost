@@ -910,8 +910,8 @@ void drawend(int close, int fill)
 	fill = !fill ? 2 : fill;
 	if (l_page != page_n || l_size != o_s || l_wid != pdf_linewid ||
 			l_cap != pdf_linecap || l_join != pdf_linejoin) {
-		int lwid = pdf_linewid * o_s;
-		sbuf_printf(pg, "%d.%03d w\n", lwid / 1000, lwid % 1000);
+		int lwid = pdf_linewid;
+		sbuf_printf(pg, "%d.%02d w\n", lwid / 100, lwid % 100);
 		sbuf_printf(pg, "%d J %d j\n", pdf_linecap, pdf_linejoin);
 		l_page = page_n;
 		l_size = o_s;
