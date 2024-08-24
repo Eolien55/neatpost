@@ -363,26 +363,28 @@ static int o_loadfont(struct glyph *g)
 static char *pdfpos00(int uh, int uv)
 {
 	static char buf[64];
-	int h = (long) uh * 72 / dev_res;
-	int v = (long) pdf_height * 100 - (long) uv * 72 / dev_res;
-	sprintf(buf, "%s%d.%02d %s%d.%02d",
-		h < 0 ? "-" : "", abs(h) / 100, abs(h) % 100,
-		v < 0 ? "-" : "", abs(v) / 100, abs(v) % 100);
+	double h = (double) uh * 72.0 / dev_res;
+	double v = (double) pdf_height * 100 - (double) uv * 72.0 / dev_res;
+	sprintf(buf, "%f %f", h / 100, v / 100);
 	return buf;
 }
 
 /* convert troff position to pdf position; returns a static buffer */
 static char *pdfpos(int uh, int uv)
 {
-	return pdfpos00(uh * 100, uv * 100);
+	static char buf[64];
+	double h = (double) uh * 72.0 / dev_res;
+	double v = (double) pdf_height - (double) uv * 72.0 / dev_res;
+	sprintf(buf, "%f %f", h, v);
+	return buf;
 }
 
 /* troff length to thousands of a unit of text space; returns a static buffer */
 static char *pdfunit(int uh, int sz)
 {
 	static char buf[64];
-	int h = (long) uh * 1000 * 72 / sz / dev_res;
-	sprintf(buf, "%s%d", h < 0 ? "-" : "", abs(h));
+	double h = (double) uh * 1000.0 * 72.0 / sz / dev_res;
+	sprintf(buf, "%f", h);
 	return buf;
 }
 
