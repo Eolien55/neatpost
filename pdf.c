@@ -1008,6 +1008,11 @@ void draws(int h1, int v1, int h2, int v2)
 	outrel(h1, v1);
 }
 
+void drawt(int w)
+{
+	pdf_linewid = w * 7200 / dev_res;
+}
+
 void docheader(char *title, int pagewidth, int pageheight, int linewidth)
 {
 	if (title)
