@@ -944,17 +944,17 @@ void drawl(int h, int v)
 /* draw circle/ellipse quadrant */
 static void drawquad(int ch, int cv)
 {
-	long b = 551915;
+	double b = 551915;
 	long x0 = o_h * 1000;
 	long y0 = o_v * 1000;
 	long x3 = x0 + ch * 1000 / 2;
 	long y3 = y0 + cv * 1000 / 2;
 	long x1 = x0;
 	long y1 = y0 + cv * b / 1000 / 2;
-	long x2 = x0 + ch * b / 1000 / 2;
+	long x2 = x3 - ch * b / 1000 / 2;
 	long y2 = y3;
-	if (ch * cv < 0) {
-		x1 = x3 - ch * b / 1000 / 2;
+	if (ch/abs(ch) * cv/abs(cv) < 0) {
+		x1 = x0 + ch * b / 1000 / 2;
 		y1 = y0;
 		x2 = x3;
 		y2 = y3 - cv * b / 1000 / 2;
