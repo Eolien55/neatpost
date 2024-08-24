@@ -7,6 +7,8 @@
 
 static char ps_title[256];	/* document title */
 static char ps_author[256];	/* document author */
+static char ps_subject[256];	/* document subject */
+static char ps_keywords[256];	/* document keywords */
 static int ps_height;		/* document height in basic units */
 static int o_f, o_s, o_m;	/* font and size */
 static int o_h, o_v;		/* current user position */
@@ -314,13 +316,13 @@ void outlink(char *lnk, int hwid, int vwid)
 {
 	o_flush();
 	if (lnk[0] == '#' || isdigit((unsigned char) lnk[0])) {
-		outf("[ /Rect [ %d %d t %d %d t ] %s%s "
+		outf("[ /Rect [ %d %d t %d %d t ] /Border [0 0 0] %s%s "
 			"/Subtype /Link /LNK pdfmark\n",
 			o_h, o_v, o_h + hwid, o_v + vwid,
 			lnk[0] == '#' ? "/Dest /" : "/Page ",
 			lnk[0] == '#' ? lnk + 1 : lnk);
 	} else {
-		outf("[ /Rect [ %d %d t %d %d t ] "
+		outf("[ /Rect [ %d %d t %d %d t ] /Border [0 0 0] "
 			"/Action << /Subtype /URI /URI %s >> /Open true "
 			"/Subtype /Link /LNK pdfmark\n",
 			o_h, o_v, o_h + hwid, o_v + vwid, pdftext_static(lnk));
@@ -368,6 +370,10 @@ void outinfo(char *kwd, char *val)
 		snprintf(ps_author, sizeof(ps_author), "%s", val);
 	if (!strcmp("Title", kwd))
 		snprintf(ps_title, sizeof(ps_title), "%s", val);
+	if (!strcmp("Subject", kwd))
+		snprintf(ps_subject, sizeof(ps_subject), "%s", val);
+	if (!strcmp("Keywords", kwd))
+		snprintf(ps_keywords, sizeof(ps_keywords), "%s", val);
 }
 
 void outset(char *var, char *val)
@@ -396,6 +402,10 @@ void doctrailer(int pages)
 		out(" /Title %s", pdftext_static(ps_title));
 	if (ps_author[0])
 		out(" /Author %s", pdftext_static(ps_author));
+	if (ps_subject[0])
+		out(" /Subject %s", pdftext_static(ps_subject));
+	if (ps_keywords[0])
+		out(" /Keywords %s", pdftext_static(ps_keywords));
 	out(" /Creator (Neatroff) /DOCINFO pdfmark\n");
 	out("%%%%Trailer\n");
 	out("done\n");

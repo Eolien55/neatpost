@@ -11,6 +11,8 @@
 
 static char pdf_title[256];	/* document title */
 static char pdf_author[256];	/* document author */
+static char pdf_subject[256];	/* document subject */
+static char pdf_keywords[256];	/* document keywords */
 static int pdf_width;		/* page width */
 static int pdf_height;		/* page height */
 static int pdf_linewid;		/* line width in thousands of ems */
@@ -754,7 +756,7 @@ void outlink(char *lnk, int hwid, int vwid)
 	pdfout("  /Type /Annot\n");
 	pdfout("  /Subtype /Link\n");
 	pdfout("  /Rect [%s", pdfpos(o_h, o_v));
-	pdfout(" %s]\n", pdfpos(o_h + hwid, o_v + vwid));
+	pdfout(" %s] /Border [0 0 0]\n", pdfpos(o_h + hwid, o_v + vwid));
 	if (lnk[0] == '#') {	/* internal links */
 		pdfout("  /A << /S /GoTo /D (%s) >>\n", lnk + 1);
 	} else {		/* external links */
@@ -852,6 +854,10 @@ void outinfo(char *kwd, char *val)
 		snprintf(pdf_author, sizeof(pdf_author), "%s", val);
 	if (!strcmp("Title", kwd))
 		snprintf(pdf_title, sizeof(pdf_title), "%s", val);
+	if (!strcmp("Subject", kwd))
+		snprintf(pdf_subject, sizeof(pdf_subject), "%s", val);
+	if (!strcmp("Keywords", kwd))
+		snprintf(pdf_keywords, sizeof(pdf_keywords), "%s", val);
 }
 
 void outset(char *var, char *val)
@@ -1052,6 +1058,10 @@ void doctrailer(int pages)
 		pdfout("  /Title %s\n", pdftext_static(pdf_title));
 	if (pdf_author[0])
 		pdfout("  /Author %s\n", pdftext_static(pdf_author));
+	if (pdf_subject[0])
+		pdfout("  /Subject %s\n", pdftext_static(pdf_subject));
+	if (pdf_keywords[0])
+		pdfout("  /Keywords %s\n", pdftext_static(pdf_keywords));
 	pdfout("  /Creator (Neatroff)\n");
 	pdfout("  /Producer (Neatpost)\n");
 	pdfout(">>\n");
