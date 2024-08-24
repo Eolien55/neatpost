@@ -202,15 +202,23 @@ static void postspline(void)
 	draws(h1, v1, 0, 0);
 }
 
-static void postpoly(void)
+static int postpoly(void)
 {
 	int l = 'l';
 	int c;
+	int close = 0;
+	c = next();
+
 	while (!iseol() && (l == 'l' || l == '~' || l == 'a')) {
 		do {
 			c = next();
 		} while (c == ' ');
 		back(c);
+		if (c == '#') {
+			next();
+			close = 1;
+			continue;
+		}
 		if (c != '-' && c != '+' && (c < '0' || c > '9')) {
 			l = c;
 			while (c >= 0 && !isspace(c))
@@ -224,11 +232,14 @@ static void postpoly(void)
 		if (l == 'a')
 			postarc();
 	}
+
+	return close;
 }
 
 static void postdraw(void)
 {
 	int h1, v1;
+	int close = 0;
 	int c = next();
 	drawbeg();
 	switch (tolower(c)) {
@@ -255,10 +266,10 @@ static void postdraw(void)
 		postspline();
 		break;
 	case 'p':
-		postpoly();
+		close = postpoly();
 		break;
 	}
-	drawend(c == 'p' || c == 'P', c == 'E' || c == 'C' || c == 'P');
+	drawend(close, c == 'E' || c == 'C' || c == 'P');
 	nexteol();
 }
 
