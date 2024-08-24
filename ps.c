@@ -227,7 +227,6 @@ void drawbeg(void)
 		l_cap = ps_linecap;
 		l_join = ps_linejoin;
 	}
-
 	if (draw_path)
 		return;
 	outf("newpath ");
